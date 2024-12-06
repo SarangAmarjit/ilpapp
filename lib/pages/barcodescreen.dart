@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ilpapp/pages/mobile_scanner_overlay.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class BarcodeScannerScreen extends StatefulWidget {
@@ -10,7 +11,23 @@ class BarcodeScannerScreen extends StatefulWidget {
 
 class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
   String? scannedBarcode;
-
+  Widget _buildItem(BuildContext context, String label, Widget page) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => page,
+              ),
+            );
+          },
+          child: Text(label),
+        ),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,52 +37,10 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen> {
       ),
       body: Column(
         children: [
-          scannedBarcode != null
-              ? const SizedBox()
-              : SizedBox(
-                  height: 400,
-                  child: Expanded(
-                    child: MobileScanner(
-                      controller: MobileScannerController(
-                          detectionSpeed: DetectionSpeed.unrestricted),
-                      onDetect: (
-                        barcode,
-                      ) {
-                        setState(() {
-                          scannedBarcode = barcode.barcodes.first.displayValue!;
-                        });
-
-                        if (scannedBarcode != null) {
-                          // Stop scanning after successful detection
-                          MobileScannerController().stop();
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Scanned Barcode'),
-                              content: Text(scannedBarcode ?? 'No data'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ),
-          if (scannedBarcode != null)
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Scanned: $scannedBarcode',
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+       _buildItem(
+              context,
+              'MobileScanner with Overlay',
+              const BarcodeScannerWithOverlay(),
             ),
         ],
       ),
