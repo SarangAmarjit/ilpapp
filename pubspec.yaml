@@ -38,6 +38,8 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_svg: ^2.0.16
   font_awesome_flutter: ^10.8.0
+  mobile_scanner: ^6.0.2
+
 
 dev_dependencies:
   flutter_test:
