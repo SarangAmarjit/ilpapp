@@ -32,7 +32,10 @@ class HomePage extends StatelessWidget {
             Text(
               'Tap the button below to scan the QR code on the card and verify its authenticity.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16.0, color: Colors.grey[600]),
+              style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.grey[600],
+                  fontStyle: FontStyle.italic),
             ),
             const SizedBox(height: 30.0),
 
