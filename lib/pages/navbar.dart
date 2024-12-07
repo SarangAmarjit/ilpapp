@@ -49,7 +49,7 @@ class _MainScreenState extends State<MainScreen> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          const LoginPage()), // Replace with your LoginPage
+                          LoginPage()), // Replace with your LoginPage
                 );
               },
               child: const Text('Log Out'),

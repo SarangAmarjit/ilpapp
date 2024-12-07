@@ -1,64 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ilpapp/pages/HomePage.dart';
-import 'package:ilpapp/pages/navbar.dart';
+import 'package:ilpapp/controller/authcontroller.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  bool isStayed = false;
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
-  // Example: Hardcoded correct username and password
-  final String correctUsername = "admin";
-  final String correctPassword = "12345";
-
-  void _validateAndLogin() {
-    String username = _usernameController.text;
-    String password = _passwordController.text;
-
-    if (username.isEmpty || password.isEmpty) {
-      _showDialog("Error", "Username or Password cannot be empty.");
-    } else if (username != correctUsername || password != correctPassword) {
-      _showDialog("Login Failed", "Incorrect Username or Password.");
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MainScreen()),
-      );
-      _showDialog("Login Success", "Welcome, $username!");
-    }
-  }
-
-  void _showDialog(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final LoginController controller = Get.put(LoginController());
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -69,25 +20,23 @@ class _LoginPageState extends State<LoginPage> {
               image: const AssetImage('assets/images/bg4.png'),
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.3), // Adjust opacity as needed
-                BlendMode.darken, // Blend mode to apply black overlay
+                Colors.black.withOpacity(0.3),
+                BlendMode.darken,
               ),
             ),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // "Welcome to Manipur"
               Text(
                 'Welcome to Manipur',
                 style: GoogleFonts.greatVibes(
-                  fontSize: 45, // Adjust as needed
+                  fontSize: 45,
                   color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
-              // "The Jewelled Land"
               Text(
                 '- THE JEWELLED LAND -',
                 style: GoogleFonts.merriweather(
@@ -95,8 +44,8 @@ class _LoginPageState extends State<LoginPage> {
                   foreground: Paint()
                     ..style = PaintingStyle.stroke
                     ..strokeWidth = 1
-                    ..color = Colors.orange, // Border color
-                  fontSize: 20, // Adjust as needed
+                    ..color = Colors.orange,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
@@ -153,13 +102,8 @@ class _LoginPageState extends State<LoginPage> {
                             ],
                           ),
                           const SizedBox(height: 20),
-                          // Username Field
                           TextFormField(
-                            scrollPadding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom -
-                                        60),
-                            controller: _usernameController,
+                            controller: controller.usernameController,
                             decoration: InputDecoration(
                               hintText: 'Username',
                               hintStyle: const TextStyle(
@@ -171,21 +115,16 @@ class _LoginPageState extends State<LoginPage> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               prefixIcon: const Icon(
-                                size: 20,
-                                FontAwesomeIcons.user, // Icon for username
+                                FontAwesomeIcons.user,
                                 color: Color.fromARGB(255, 222, 228, 211),
+                                size: 20,
                               ),
                             ),
                             style: const TextStyle(color: Colors.white),
                           ),
                           const SizedBox(height: 15),
-                          // Password Field
                           TextField(
-                            scrollPadding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom -
-                                        130),
-                            controller: _passwordController,
+                            controller: controller.passwordController,
                             obscureText: true,
                             decoration: InputDecoration(
                               hintText: 'Password',
@@ -198,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               prefixIcon: const Icon(
-                                FontAwesomeIcons.lock, // Icon for password
+                                FontAwesomeIcons.lock,
                                 color: Color.fromARGB(255, 222, 228, 211),
                                 size: 20,
                               ),
@@ -206,27 +145,24 @@ class _LoginPageState extends State<LoginPage> {
                             style: const TextStyle(color: Colors.white),
                           ),
                           const SizedBox(height: 15),
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: isStayed,
-                                onChanged: (value) {
-                                  setState(() {
-                                    isStayed = value!;
-                                  });
-                                },
-                                activeColor: Colors.green,
-                              ),
-                              const Text(
-                                'Stay signed in',
-                                style: TextStyle(color: Colors.white70),
-                              ),
-                            ],
-                          ),
+                          Obx(() => Row(
+                                children: [
+                                  Checkbox(
+                                    value: controller.isStayed.value,
+                                    onChanged: (value) {
+                                      controller.isStayed.value = value!;
+                                    },
+                                    activeColor: Colors.green,
+                                  ),
+                                  const Text(
+                                    'Stay signed in',
+                                    style: TextStyle(color: Colors.white70),
+                                  ),
+                                ],
+                              )),
                           const SizedBox(height: 10),
-                          // Sign In Button
                           ElevatedButton(
-                            onPressed: _validateAndLogin,
+                            onPressed: controller.validateAndLogin,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green,
                               shape: RoundedRectangleBorder(
