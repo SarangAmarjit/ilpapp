@@ -19,9 +19,9 @@ class LoginController extends GetxController {
     } else if (username != correctUsername || password != correctPassword) {
       _showDialog("Login Failed", "Incorrect Username or Password.");
     } else {
+      Get.off(() => const MainScreen());
       _showDialog("Login Success", "Welcome, $username!");
       // Navigate to the next screen
-      Get.off(() => const MainScreen());
     }
   }
 
