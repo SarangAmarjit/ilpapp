@@ -1,53 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:ilpapp/model/scannermodel.dart'; // Assuming this is your model
-import 'dart:convert'; // For JSON parsing
+import 'package:get/get.dart';
+import 'package:ilpapp/controller/scancontroller.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  QrScannerModel? scannedModel;
-
-  Future<void> _startQRScan() async {
-    String barcodeScanRes;
-
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-        '#ff6666', // Scanner overlay color
-        'Cancel', // Cancel button text
-        true, // Show flash icon
-        ScanMode.QR, // Set scan mode to QR
-      );
-    } on PlatformException {
-      barcodeScanRes = 'Failed to start QR scanner.';
-    }
-
-    if (barcodeScanRes.isNotEmpty && barcodeScanRes != '-1') {
-      // Ensure it's not canceled
-      try {
-        // Parse the JSON data into QrScannerModel
-        final parsedData = qrScannerModelFromJson(barcodeScanRes);
-        setState(() {
-          scannedModel = parsedData; // Update the model
-        });
-      } catch (e) {
-        // Handle invalid JSON
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('The scanned QR code contains invalid data.')),
-        );
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Initialize the HomeController
+    HomeController controller = Get.put(HomeController());
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('ILP Card Verification'),
@@ -70,7 +32,10 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(fontSize: 16.0, color: Colors.grey[600]),
             ),
             const SizedBox(height: 30.0),
-            GestureDetector(onTap: _startQRScan,
+
+            // Scan Button
+            GestureDetector(
+              onTap: controller.startQRScan,
               child: Card(
                 color: Colors.white,
                 elevation: 10,
@@ -85,57 +50,49 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            // Scan Button
-            // ElevatedButton.icon(
-            //   onPressed: _startQRScan,
-            //   icon: const Icon(Icons.qr_code_scanner, size: 24.0),
-            //   label: const Text('Start QR Scan'),
-            //   style: ElevatedButton.styleFrom(
-            //     padding: const EdgeInsets.symmetric(
-            //         horizontal: 24.0, vertical: 12.0),
-            //     textStyle: const TextStyle(fontSize: 18.0),
-            //   ),
-            // ),
             const SizedBox(height: 30.0),
 
             // Scanned Data Display
-            scannedModel != null
-                ? Card(
-                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                    elevation: 4.0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Scanned Data:',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
+            Obx(() {
+              if (controller.scannedModel.value != null) {
+                final model = controller.scannedModel.value!;
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                  elevation: 4.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Scanned Data:',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const Divider(),
-                          Text("Permit Type: ${scannedModel!.permitType}"),
-                          Text("Permit No: ${scannedModel!.permitNo}"),
-                          Text(
-                              "Applicant Name: ${scannedModel!.applicantName}"),
-                          Text(
-                              "Applicant Parent: ${scannedModel!.applicantParent}"),
-                          Text("ID No: ${scannedModel!.idNo}"),
-                          Text("Date of Issue: ${scannedModel!.dateOfIssue}"),
-                          Text("Valid Upto: ${scannedModel!.validUpto}"),
-                          Text("Place of Stay: ${scannedModel!.placeOfStay}"),
-                          Text("HS: ${scannedModel!.hs}"),
-                        ],
-                      ),
+                        ),
+                        const Divider(),
+                        Text("Permit Type: ${model.permitType}"),
+                        Text("Permit No: ${model.permitNo}"),
+                        Text("Applicant Name: ${model.applicantName}"),
+                        Text("Applicant Parent: ${model.applicantParent}"),
+                        Text("ID No: ${model.idNo}"),
+                        Text("Date of Issue: ${model.dateOfIssue}"),
+                        Text("Valid Upto: ${model.validUpto}"),
+                        Text("Place of Stay: ${model.placeOfStay}"),
+                        Text("HS: ${model.hs}"),
+                      ],
                     ),
-                  )
-                : Text(
-                    'No data scanned yet.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16.0, color: Colors.grey[700]),
                   ),
+                );
+              } else {
+                return Text(
+                  'No data scanned yet.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16.0, color: Colors.grey[700]),
+                );
+              }
+            }),
           ],
         ),
       ),
