@@ -8,11 +8,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Initialize the HomeController
-    HomeController controller = Get.put(HomeController());
+    Scancontroller controller = Get.put(Scancontroller());
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ILP Card Verification'),
+        title: const Text(
+          'ILP Card Verification',
+          style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 3),
+        ),
         centerTitle: true,
       ),
       body: Padding(

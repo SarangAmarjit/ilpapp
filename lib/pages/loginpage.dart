@@ -103,6 +103,7 @@ class LoginPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 20),
                           TextFormField(
+                            scrollPadding: const EdgeInsets.only(bottom: 270),
                             controller: controller.usernameController,
                             decoration: InputDecoration(
                               hintText: 'Username',
@@ -124,6 +125,7 @@ class LoginPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 15),
                           TextField(
+                            scrollPadding: const EdgeInsets.only(bottom: 200),
                             controller: controller.passwordController,
                             obscureText: true,
                             decoration: InputDecoration(

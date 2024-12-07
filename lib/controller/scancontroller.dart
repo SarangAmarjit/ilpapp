@@ -3,7 +3,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:ilpapp/model/scannermodel.dart';
 
-class HomeController extends GetxController {
+class Scancontroller extends GetxController {
   // Scanned data
   var scannedModel = Rxn<QrScannerModel>();
 
