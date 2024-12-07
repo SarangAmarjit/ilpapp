@@ -1,0 +1,1 @@
+String api = "https://manipurilponline.mn.gov.in/api/permit/";
