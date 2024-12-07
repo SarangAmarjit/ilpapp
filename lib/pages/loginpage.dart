@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ilpapp/pages/barcodescreen.dart';
-import 'package:ilpapp/pages/qrvu.dart';
+import 'package:ilpapp/pages/HomePage.dart';
+import 'package:ilpapp/pages/navbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => QRScannerExample()),
+        MaterialPageRoute(builder: (context) => MainScreen()),
       );
       _showDialog("Login Success", "Welcome, $username!");
     }
