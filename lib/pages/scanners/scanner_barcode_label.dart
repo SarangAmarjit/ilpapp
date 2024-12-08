@@ -17,10 +17,14 @@ class ScannedBarcodeLabel extends StatelessWidget {
         final scannedBarcodes = snapshot.data?.barcodes ?? [];
 
         if (scannedBarcodes.isEmpty) {
-          return const Text(
-            'Scan something!',
-            overflow: TextOverflow.fade,
-            style: TextStyle(color: Colors.white),
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16,vertical:60),
+            child: const Text(
+              'Place the QrCode in the Box',
+              overflow: TextOverflow.fade,
+              
+              style: TextStyle(color: Colors.white,fontSize: 20),
+            ),
           );
         }
 
