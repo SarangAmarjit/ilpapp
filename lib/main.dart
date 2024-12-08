@@ -3,8 +3,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ilpapp/pages/loginpage.dart';
 
+import 'controller/scancontroller.dart';
+
 void main() {
   runApp(const MyApp());
+  Get.put(Scancontroller());
+
 }
 
 class MyApp extends StatelessWidget {
